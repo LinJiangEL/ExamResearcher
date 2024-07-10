@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 
+
 def generate_card(cardfile):
     cardnum = input("请输入您的考生号：")
     A1, A2, A3, A4, A5, A6, A7, A8 = [num.strip() for num in input("请输入动态口令卡上A行数字 [用,隔开]: ").split(',')]
@@ -28,8 +29,10 @@ def generate_card(cardfile):
     }
 
     with open(cardfile, "w", encoding="utf-8") as cardfile:
-        cardfile.write(cardnum + '\n')
+        cardfile.write(cardnum)
+        cardfile.write('\n')
         cardfile.write(str(cardcontext))
+
 
 ROOTDIR = os.getcwd()
 url = "https://gkcx2.jseea.cn/"
@@ -38,9 +41,10 @@ cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
     print("未检测到动态口令卡信息，请录入卡上信息。")
     generate_card("card")
-cardf = open(os.path.join(ROOTDIR, "card"), "r")
-cardid = cardf.readlines()[0]
-cardpasscode: dict = eval(cardf.readlines()[1])
+cardf = open(os.path.join(ROOTDIR, "card"), "r+")
+lines = cardf.readlines()
+cardid = lines[0].strip()
+cardpasscode: dict = eval(lines[1])
 
 options = webdriver.FirefoxOptions()
 options.headless = True
