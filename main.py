@@ -41,13 +41,13 @@ url = "https://gkcx2.jseea.cn/"
 
 ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
 sys.path.append(ROOTDIR)
-
+os.chdir(ROOTDIR)
 driverpath = os.path.join(ROOTDIR, "geckodriver.exe")
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     filepath = os.path.join(sys._MEIPASS, "geckodriver.exe")
     if not os.path.exists(driverpath):
         shutil.copy(filepath, ROOTDIR)
-
+print("请把geckodriver.exe所在目录添加到系统环境变量。")
 cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
     print("未检测到动态口令卡信息，请录入卡上信息。")
@@ -59,7 +59,6 @@ cardpasscode: dict = eval(lines[1])
 
 options = webdriver.FirefoxOptions()
 options.add_argument("--headless")
-
 driver = webdriver.Firefox(options=options)
 driver.get(url)
 examcode = driver.find_element(by=By.ID, value="ksh")
