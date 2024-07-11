@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import shutil
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -38,11 +39,15 @@ def generate_card(cardfile):
 
 url = "https://gkcx2.jseea.cn/"
 
-driverpath = r"geckodriver.exe"
 ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
 sys.path.append(ROOTDIR)
+
+driverpath = "D:\\geckodriver.exe"
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    os.chdir(sys._MEIPASS)
+    if not os.path.exists(driverpath):
+        shutil.copyfile(driverpath, "D:\\")
+    service = Service(executable_path=driverpath)
+
 cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
     print("未检测到动态口令卡信息，请录入卡上信息。")
@@ -52,10 +57,14 @@ lines = cardf.readlines()
 cardid = lines[0].strip()
 cardpasscode: dict = eval(lines[1])
 
-service = Service(executable_path=driverpath)
 options = webdriver.FirefoxOptions()
 options.add_argument("--headless")
-driver = webdriver.Firefox(options=options, service=service)
+
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    service = Service(executable_path=driverpath)
+    driver = webdriver.Firefox(options=options, service=service)
+else:
+    driver = webdriver.Firefox(options=options)
 driver.get(url)
 examcode = driver.find_element(by=By.ID, value="ksh")
 passcode = driver.find_element(by=By.ID, value="code")
