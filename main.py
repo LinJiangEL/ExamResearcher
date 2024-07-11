@@ -42,12 +42,11 @@ url = "https://gkcx2.jseea.cn/"
 ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
 sys.path.append(ROOTDIR)
 
-driverpath = "D:\\geckodriver.exe"
+driverpath = os.path.join(ROOTDIR, "geckodriver.exe")
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     filepath = os.path.join(sys._MEIPASS, "geckodriver.exe")
     if not os.path.exists(driverpath):
-        shutil.copy(filepath, "D:\\")
-    service = Service(executable_path=driverpath)
+        shutil.copy(filepath, ROOTDIR)
 
 cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
@@ -61,12 +60,7 @@ cardpasscode: dict = eval(lines[1])
 options = webdriver.FirefoxOptions()
 options.add_argument("--headless")
 
-if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    service = Service(executable_path=driverpath)
-    driver = webdriver.Firefox(options=options, service=service)
-else:
-    service = Service(executable_path="geckodriver.exe")
-    driver = webdriver.Firefox(options=options, service=service)
+driver = webdriver.Firefox(options=options)
 driver.get(url)
 examcode = driver.find_element(by=By.ID, value="ksh")
 passcode = driver.find_element(by=By.ID, value="code")
