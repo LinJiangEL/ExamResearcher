@@ -44,8 +44,9 @@ sys.path.append(ROOTDIR)
 
 driverpath = "D:\\geckodriver.exe"
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    filepath = os.path.join(sys._MEIPASS, "geckodriver.exe")
     if not os.path.exists(driverpath):
-        shutil.copyfile(driverpath, "D:\\")
+        shutil.copyfile(filepath, "D:\\")
     service = Service(executable_path=driverpath)
 
 cardpath = os.path.join(ROOTDIR, "card")
