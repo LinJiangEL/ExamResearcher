@@ -41,8 +41,8 @@ url = "https://gkcx2.jseea.cn/"
 driverpath = r"geckodriver.exe"
 ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
 sys.path.append(ROOTDIR)
-if getattr(sys, 'frozen', False):
-    sys.path.append(sys._MEIPASS)
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    os.chdir(sys._MEIPASS)
 cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
     print("未检测到动态口令卡信息，请录入卡上信息。")
