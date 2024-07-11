@@ -48,7 +48,7 @@ cardid = lines[0].strip()
 cardpasscode: dict = eval(lines[1])
 
 options = webdriver.FirefoxOptions()
-options.headless = True
+options.add_argument("--headless")
 driver = webdriver.Firefox(options=options)
 driver.get(url)
 examcode = driver.find_element(by=By.ID, value="ksh")
