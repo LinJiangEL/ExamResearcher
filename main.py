@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from PIL import Image
 from selenium import webdriver
@@ -34,8 +35,8 @@ def generate_card(cardfile):
         cardfile.write(str(cardcontext))
 
 
-ROOTDIR = os.getcwd()
 url = "https://gkcx2.jseea.cn/"
+ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
 
 cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
