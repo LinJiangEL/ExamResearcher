@@ -162,3 +162,5 @@ cython_debug/
 .idea/
 /card
 /*.png
+/*.exe
+/version_info.txt
