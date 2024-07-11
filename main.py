@@ -46,7 +46,7 @@ driverpath = "D:\\geckodriver.exe"
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     filepath = os.path.join(sys._MEIPASS, "geckodriver.exe")
     if not os.path.exists(driverpath):
-        shutil.copyfile(filepath, "D:\\")
+        shutil.copy(filepath, "D:\\")
     service = Service(executable_path=driverpath)
 
 cardpath = os.path.join(ROOTDIR, "card")
@@ -65,7 +65,8 @@ if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     service = Service(executable_path=driverpath)
     driver = webdriver.Firefox(options=options, service=service)
 else:
-    driver = webdriver.Firefox(options=options)
+    service = Service(executable_path="geckodriver.exe")
+    driver = webdriver.Firefox(options=options, service=service)
 driver.get(url)
 examcode = driver.find_element(by=By.ID, value="ksh")
 passcode = driver.find_element(by=By.ID, value="code")
