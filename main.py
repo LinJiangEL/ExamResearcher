@@ -4,6 +4,7 @@ import time
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 
 
@@ -36,8 +37,10 @@ def generate_card(cardfile):
 
 
 url = "https://gkcx2.jseea.cn/"
-ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
 
+driverpath = r"geckodriver.exe"
+ROOTDIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(__file__))
+sys.path.append(ROOTDIR)
 cardpath = os.path.join(ROOTDIR, "card")
 if not os.path.exists(cardpath):
     print("未检测到动态口令卡信息，请录入卡上信息。")
@@ -47,9 +50,10 @@ lines = cardf.readlines()
 cardid = lines[0].strip()
 cardpasscode: dict = eval(lines[1])
 
+service = Service(executable_path=driverpath)
 options = webdriver.FirefoxOptions()
 options.add_argument("--headless")
-driver = webdriver.Firefox(options=options)
+driver = webdriver.Firefox(options=options, service=service)
 driver.get(url)
 examcode = driver.find_element(by=By.ID, value="ksh")
 passcode = driver.find_element(by=By.ID, value="code")
